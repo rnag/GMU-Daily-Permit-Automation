@@ -25,6 +25,9 @@ Use the Script to purchase following supported Permit:
    (.venv) ➜  GMU-Daily-Permit-Automation git:(main) $ pip install -r requirements.txt   
     ```
 5. Run the Script
+
+   > [!CAUTION] Remember to double check and set [parking date](./config.template.toml#L8) each script run! Find this under the `[parking]` section in `config.toml`.
+ 
     ```shell
     python main.py
     ```
