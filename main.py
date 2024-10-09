@@ -11,17 +11,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-options = webdriver.ChromeOptions()
-options.add_argument('--start-maximized')
-options.add_argument('--start-fullscreen')
-
-# Using Chrome to access web
-#driver = webdriver.Chrome()
-
-# Creating a driver instance with the previous capabilities
-driver = webdriver.Chrome(options)
-
-
 @dataclass
 class Config:
     user: str
@@ -57,7 +46,17 @@ class Config:
 
 config = Config.from_file()
 
-wait = WebDriverWait(driver, 60)  # Wait for a maximum of 10 seconds
+options = webdriver.ChromeOptions()
+options.add_argument('--start-maximized')
+options.add_argument('--start-fullscreen')
+
+# Using Chrome to access web
+#driver = webdriver.Chrome()
+
+# Creating a driver instance with the previous capabilities
+driver = webdriver.Chrome(options)
+
+wait = WebDriverWait(driver, 60)  # Wait for a maximum of 60 seconds
 
 
 def main():
@@ -183,8 +182,6 @@ def main():
     s = uniform(0.5, 2)
     time.sleep(s)
 
-    # creditCardPaymentExpirationMonthSelect > 10
-    # creditCardPaymentExpirationYearSelect > 2024
     name = driver.find_element(By.ID, 'creditCardPaymentNameOnCard')
     name.send_keys(config.cardholder)
 
