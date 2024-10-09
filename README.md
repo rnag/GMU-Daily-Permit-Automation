@@ -25,7 +25,7 @@ Use the Script to purchase following supported Permit:
 
 2. Fill out [`config.template.toml`](./config.template.toml), and rename to `config.toml`.
 3. Download [Python](https://www.python.org/downloads/) if needed, and [set up a virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/). Activate `venv`.
-4. Install project dependencies with `pip install` (*Requires Python 3.8+*)
+4. Install project dependencies with `pip` (*Script requires Python 3.8+*)
     ```shell
    (.venv) ➜  GMU-Daily-Permit-Automation git:(main) $ pip install -r requirements.txt   
     ```
