@@ -19,8 +19,8 @@ Use the Script to purchase following supported Permit:
 1. Clone this repo into your local machine.
 
     ```sh
-    $ git clone https://github.com/rnag/GMU-Daily-Permit-Automation.git
-    $ cd GMU-Daily-Permit-Automation
+    git clone https://github.com/rnag/GMU-Daily-Permit-Automation.git
+    cd GMU-Daily-Permit-Automation
     ```
 
 2. Fill out [`config.template.toml`](./config.template.toml), and rename to `config.toml`.
