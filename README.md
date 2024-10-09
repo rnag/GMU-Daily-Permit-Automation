@@ -1,13 +1,14 @@
 # GMU Daily Permit Automation
 
-Selenium Script to automate / speed up the manual process of purchasing
-a Daily Permit from https://gmu.t2hosted.com/per/selectpermit.aspx.
+Selenium Script to speed up the manual process of purchasing
+Daily (Parking) Permit from https://gmu.t2hosted.com/per/selectpermit.aspx.
 
 Use the Script to purchase following supported Permit:
 > Evening General Permit (only valid from 4:00pm-11:59pm)
 
-2FA [with Duo](https://duo.com/) is still necessary. Please keep
-your phone handy when running the Script.
+> [!IMPORTANT]
+> 2FA [with Duo](https://duo.com/) is still necessary. 
+> Please keep your phone handy when running the Script.
 
 ## Quickstart
 
