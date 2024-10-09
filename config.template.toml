@@ -1,0 +1,19 @@
+# Application configuration file
+
+[credentials]
+user = 'TODO'
+password = 'TODO'
+
+[parking]
+date = 'October 10'
+
+[credit_card]
+type = 'Visa'  # Visa or Mastercard
+name = 'John Doe'
+number = '1234 5678 9012 3456'
+cvv = '123'
+expiry_month = 1
+expiry_year = 2050
+
+[contact]
+phone = '1234567890'
