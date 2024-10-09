@@ -26,8 +26,22 @@ Use the Script to purchase following supported Permit:
     ```
 5. Run the Script
 
-   > [!CAUTION] Remember to double check and set [parking date](./config.template.toml#L8) each script run! Find this under the `[parking]` section in `config.toml`.
+   > [!CAUTION]
+   > Remember to double check and set [parking date](./config.template.toml#L8) each script run!
+   > Find this under the `[parking]` section in `config.toml`.
  
     ```shell
     python main.py
     ```
+
+## Motivation (or Rationale)
+
+As a current, part-time graduate student @ [George Mason](https://www.gmu.edu/), I usually take 1 class per semester,
+and it's more cost-effective to purchase the Daily Permit, as opposed to a Weekly or Semester Permit.
+
+However, purchasing a Daily Permit is a time-consuming process, and I usually procrastinate and leave it off till
+the last minute (day of) which results in added stress on my part.
+
+This Script aims to solve my longstanding issue, and enable me to more easily
+purchase Daily Permit for the date of class.
+
