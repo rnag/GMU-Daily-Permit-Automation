@@ -13,7 +13,7 @@ Use the Script to purchase following supported Permit:
 ## Quickstart
 
 > [!CAUTION]
-> Remember to double check and set [parking date](./config.template.toml#L8) each script run!
+> Remember to double check and set [parking date](./config.template.toml#L9) each script run!
 > Find this under the `[parking]` section in `config.toml`.
 
 1. Clone this repo into your local machine.

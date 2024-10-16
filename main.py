@@ -1,5 +1,7 @@
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import date
+from pprint import pprint
 from random import randint, uniform
 
 import toml
@@ -10,19 +12,28 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from utils import next_day, Day
+
+
+class MaskedExceptLast4Chars(str):
+    """Mask value but show the last 4 digits"""
+    def __repr__(self):
+        # Credits: https://stackoverflow.com/a/79092406/10237506
+        return f"'{self[-4:]:*>{len(self)}}'"
+
 
 @dataclass
 class Config:
     user: str
-    password: str
+    password: str = field(repr=False)
     title: str
     card_type: str
     cardholder: str
-    card_num: str
+    card_num: MaskedExceptLast4Chars
     card_cvv: str
     expiry_month: int
     expiry_year: int
-    phone: str
+    phone: MaskedExceptLast4Chars
 
     @classmethod
     def from_file(cls):
@@ -30,17 +41,25 @@ class Config:
         config_file = 'config.toml'
         _cfg = toml.load(config_file)
 
+        parking_date = _cfg['parking']['date']
+        try:
+            day = Day.fromstr(parking_date)
+        except KeyError:
+            pass
+        else:
+            parking_date = next_day(date.today(), day).strftime('%B %d')
+
         return cls(
             user=(credentials := _cfg['credentials'])['user'],
             password=credentials['password'],
-            title=_cfg['parking']['date'],
+            title=parking_date,
             card_type=(card := _cfg['credit_card'])['type'],
             cardholder=card['name'],
-            card_num=card['number'],
+            card_num=MaskedExceptLast4Chars(card['number'].replace(' ', '')),
             card_cvv=card['cvv'],
             expiry_month=card['expiry_month'],
             expiry_year=card['expiry_year'],
-            phone=_cfg['contact']['phone'],
+            phone=MaskedExceptLast4Chars(_cfg['contact']['phone']),
         )
 
 
@@ -50,16 +69,17 @@ options = webdriver.ChromeOptions()
 options.add_argument('--start-maximized')
 options.add_argument('--start-fullscreen')
 
-# Using Chrome to access web
-#driver = webdriver.Chrome()
-
-# Creating a driver instance with the previous capabilities
-driver = webdriver.Chrome(options)
-
-wait = WebDriverWait(driver, 60)  # Wait for a maximum of 60 seconds
-
 
 def main():
+    pprint(config)
+
+    # Using Chrome to access web
+    # driver = webdriver.Chrome()
+
+    # Creating a driver instance with the previous capabilities
+    driver = webdriver.Chrome(options)
+
+    wait = WebDriverWait(driver, 60)  # Wait for a maximum of 60 seconds
 
     driver.get('https://gmu.t2hosted.com/per/selectpermit.aspx')
 
@@ -92,7 +112,8 @@ def main():
 
     # basketText
 
-    if driver.find_elements(By.XPATH, '//span[text()="A previous basket in payment pending status was found.  You have been assigned to this basket."]'):
+    if driver.find_elements(By.XPATH, '//span[text()="A previous basket in payment pending status was found.'
+                                      '  You have been assigned to this basket."]'):
         basket = driver.find_element(By.ID, 'basketText')
         basket.click()
         driver.save_screenshot('cart.png')
@@ -106,12 +127,14 @@ def main():
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
-        label = driver.find_element(By.XPATH, '//label[text()="Evening General Permit (only valid from 4:00pm-11:59pm)"]')
+        label = driver.find_element(By.XPATH, '//label[text()="Evening General Permit '
+                                              '(only valid from 4:00pm-11:59pm)"]')
         radio_id = label.get_attribute('for')
         radio = driver.find_element(By.ID, radio_id)
         radio.click()
 
-        label = driver.find_element(By.XPATH, '//label[text()="I have read and understand the rules & regulations associated with the chosen permit."]')
+        label = driver.find_element(By.XPATH, '//label[text()="I have read and understand the '
+                                              'rules & regulations associated with the chosen permit."]')
         check_id = label.get_attribute('for')
         check = driver.find_element(By.ID, check_id)
         check.click()
@@ -122,8 +145,8 @@ def main():
         # Select Start Date
         driver.save_screenshot('sdate.png')
 
-        date = driver.find_element(By.CSS_SELECTOR, f'[title="{config.title}"]')
-        date.click()
+        date_link = driver.find_element(By.CSS_SELECTOR, f'[title="{config.title}"]')
+        date_link.click()
 
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
@@ -132,7 +155,8 @@ def main():
         check = driver.find_element(By.NAME, 'terms')
         check.click()
 
-        check = driver.find_element(By.XPATH, ".//table[@summary='This table shows a list of vehicles.']/tbody/tr[2]/td[1]/input")
+        check = driver.find_element(By.XPATH, ".//table[@summary='This table shows "
+                                              "a list of vehicles.']/tbody/tr[2]/td[1]/input")
         check.click()
 
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
@@ -157,10 +181,10 @@ def main():
     payment_method.send_keys(Keys.RETURN)
 
     credit_card_type = driver.find_element(By.ID, 'creditCardPaymentCardTypeSelect')
-    credit_card_type.send_keys(config.card_type) # Visa or Mastercard
+    credit_card_type.send_keys(config.card_type)  # Visa or Mastercard
 
     card_number = driver.find_element(By.ID, 'creditCardPaymentAccountNumber')
-    card_number.send_keys(config.card_num.replace(' ', ''))
+    card_number.send_keys(config.card_num)
 
     cvv = driver.find_element(By.ID, 'creditCardPaymentCVV2')
     cvv.send_keys(config.card_cvv)

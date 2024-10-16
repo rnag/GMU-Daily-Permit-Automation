@@ -5,7 +5,10 @@ user = 'TODO'
 password = 'TODO'
 
 [parking]
-date = 'October 10'
+# Can be a weekday like 'Monday' 'Tuesday' 'Wednesday'
+date = 'Monday'
+# or you could also hard-code the date:
+# date = 'October 10'
 
 [credit_card]
 type = 'Visa'  # Visa or Mastercard
