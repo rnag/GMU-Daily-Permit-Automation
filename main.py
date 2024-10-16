@@ -26,7 +26,7 @@ class MaskedExceptLast4Chars(str):
 class Config:
     user: str
     password: str = field(repr=False)
-    title: str
+    parking_date: str
     card_type: str
     cardholder: str
     card_num: MaskedExceptLast4Chars
@@ -52,7 +52,7 @@ class Config:
         return cls(
             user=(credentials := _cfg['credentials'])['user'],
             password=credentials['password'],
-            title=parking_date,
+            parking_date=parking_date,
             card_type=(card := _cfg['credit_card'])['type'],
             cardholder=card['name'],
             card_num=MaskedExceptLast4Chars(card['number'].replace(' ', '')),
@@ -73,6 +73,7 @@ options.add_argument('--start-fullscreen')
 def main():
 
     pprint(config)
+    print()
 
     if input('Looks ok? (Y/N) ').upper() != 'Y':
         exit(0)
@@ -149,7 +150,7 @@ def main():
         # Select Start Date
         driver.save_screenshot('sdate.png')
 
-        date_link = driver.find_element(By.CSS_SELECTOR, f'[title="{config.title}"]')
+        date_link = driver.find_element(By.CSS_SELECTOR, f'[title="{config.parking_date}"]')
         date_link.click()
 
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
