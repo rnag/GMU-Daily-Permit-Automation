@@ -71,7 +71,11 @@ options.add_argument('--start-fullscreen')
 
 
 def main():
+
     pprint(config)
+
+    if input('Looks ok? (Y/N) ').upper() != 'Y':
+        exit(0)
 
     # Using Chrome to access web
     # driver = webdriver.Chrome()
