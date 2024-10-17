@@ -1,2 +1,4 @@
 selenium
 toml
+rich
+typer

@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gmu_cli"  # Replace with your CLI name
+version = "0.1.0"
+dependencies = [
+    "selenium",
+    "toml",
+    "rich",
+    "typer>=0.7.0",
+    "click>=8.0",  # Typer relies on Click
+]
+requires-python = ">=3.8"
+authors = [
+  {name = "Ritvik Nag", email = "me@ritviknag.com"},
+]
+maintainers = [
+  {name = "Ritvik Nag", email = "me@ritviknag.com"},
+]
+description = "A CLI app built with Typer"
+readme = "README.md"
+license = {file = "LICENSE"}
+# license = {text = "MIT License"}
+keywords = ["egg", "bacon", "sausage", "tomatoes", "Lobster Thermidor"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  # Indicate who your project is intended for
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  # Pick your license as you wish (see also "license" above)
+  "License :: OSI Approved :: MIT License",
+  # Specify the Python versions you support here.
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/rnag/GMU-Daily-Permit-Automation"
+Documentation = "https://github.com/rnag/GMU-Daily-Permit-Automation"
+Repository = "https://github.com/rnag/GMU-Daily-Permit-Automation"
+"Bug Tracker" = "https://github.com/rnag/GMU-Daily-Permit-Automation/issues"
+Changelog = "https://github.com/rnag/GMU-Daily-Permit-Automation/blob/main/CHANGELOG.md"
+
+[project.scripts]
+gmu = "gmu_cli.cli:main"  # Adjust this to point to your main function

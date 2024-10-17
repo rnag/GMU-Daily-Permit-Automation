@@ -13,26 +13,19 @@ Use the Script to purchase following supported Permit:
 ## Quickstart
 
 > [!CAUTION]
-> Remember to double check and set [parking date](./config.template.toml#L9) each script run!
-> Find this under the `[parking]` section in `config.toml`.
+> Remember to double check and set [parking date](#parking-date) each script run!
 
-1. Clone this repo into your local machine.
-
+1. Download [Python](https://www.python.org/downloads/) if needed.
+2. Install this project with `pip`. Requires Python 3.8+.
     ```sh
-    git clone https://github.com/rnag/GMU-Daily-Permit-Automation.git
-    cd GMU-Daily-Permit-Automation
+    pip install git+https://github.com/rnag/GMU-Daily-Permit-Automation.git
     ```
-
-2. Fill out [`config.template.toml`](./config.template.toml), and rename to `config.toml`.
-3. Download [Python](https://www.python.org/downloads/) if needed, and [set up a virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/). Activate `venv`.
-4. Install project dependencies with `pip` (*Script requires Python 3.8+*)
-    ```shell
-   (.venv) ➜  GMU-Daily-Permit-Automation git:(main) $ pip install -r requirements.txt   
-    ```
-5. Run the Script
+3. Run `gmu c` to get set up.
+4. Confirm config with `gmu sc`.
+5. Run the Script and watch the magic happen.
 
    ```shell
-   python main.py
+   gmu dp
    ```
 
 ## Motivation (or Rationale)
@@ -46,3 +39,10 @@ the last minute (day of) which results in added stress on my part.
 This Script aims to solve my longstanding issue, and enable me to more easily
 purchase Daily Permit for the date of class.
 
+## Fields
+
+### Parking Date
+
+Parking Date can be a weekday like `'Monday' 'Tuesday' 'Wednesday'`
+
+or you could also hard-code the date: `October 10`
