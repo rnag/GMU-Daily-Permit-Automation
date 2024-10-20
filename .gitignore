@@ -1,3 +1,4 @@
 *.png
 config.toml
 .idea/
+__pycache__
