@@ -41,7 +41,9 @@ class AliasGroup(TyperGroup):
         return default_name
 
 
-app = typer.Typer(cls=AliasGroup)
+app = typer.Typer(cls=AliasGroup,
+                  context_settings={"help_option_names": ["-h", "--help"]},
+                  no_args_is_help=True)
 
 console = Console()
 
@@ -475,7 +477,9 @@ def daily_permit(dry_run: bool = False):
     # driver.save_screenshot('before-confirm.png')
     btn.click()
 
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[value="Logout"]')))
+    driver.set_page_load_timeout(60)  # Waits up to 60 seconds for the page to load
+
+    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[value="Logout"]')))
     # wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[value="<< Back"]')))
 
     driver.save_screenshot('confirm.png')
