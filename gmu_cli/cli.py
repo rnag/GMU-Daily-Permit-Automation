@@ -487,7 +487,7 @@ def daily_permit(dry_run: bool = False):
 
     console.print('Purchase of daily permit successful.', style='bold green')
 
-    if Confirm.ask(f'Open email ({config.user}@gmu.edu) in browser tab?'):
+    if Confirm.ask(f'Open email ({config.user}@gmu.edu) in browser?'):
         webbrowser.open('http://mso365.gmu.edu/')
 
 
