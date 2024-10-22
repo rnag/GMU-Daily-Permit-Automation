@@ -100,5 +100,5 @@ $ gmu dp -h
 │ --dry-run  -d        Enable dry run (do not purchase permit).                      │
 │ --yes      -y        Skip prompts for user input and confirmation.                 │
 │ --help     -h        Show this message and exit.                                   │
-╰─────────
+╰────────────────────────────────────────────────────────────────────────────────────╯
 ```
