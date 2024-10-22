@@ -1,5 +1,6 @@
 import re
 import time
+import webbrowser
 from pathlib import Path
 from typing import Annotated, Literal
 
@@ -483,6 +484,11 @@ def daily_permit(dry_run: bool = False):
     # wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[value="<< Back"]')))
 
     driver.save_screenshot('confirm.png')
+
+    console.print('Purchase of daily permit successful.', style='bold green')
+
+    if Confirm.ask(f'Open email ({config.user}@gmu.edu) in browser tab?'):
+        webbrowser.open('http://mso365.gmu.edu/')
 
 
 def main():
