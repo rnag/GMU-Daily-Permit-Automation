@@ -312,7 +312,10 @@ def show_config(mask_values: bool = False):
 
 
 @app.command('dp | daily-permit')
-def daily_permit(dry_run: bool = False):
+def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
+                                                       help='Enable dry run (do not purchase permit).')] = False,
+                 yes: Annotated[bool, typer.Option('--yes', '-y',
+                                                   help='Skip prompts for user input and confirmation.')] = False):
     """Purchase a Daily (Parking) Permit for the GMU Campus."""
     config = Config.load()
     config.dry_run = dry_run
@@ -320,7 +323,7 @@ def daily_permit(dry_run: bool = False):
     config.print_table()
     console.print()
 
-    if not Confirm.ask('Looks good?'):
+    if not yes and not Confirm.ask('Looks good?'):
         print()
         console.print('Use [bold green]c | configure[/] to get started.')
         exit(0)
@@ -487,8 +490,12 @@ def daily_permit(dry_run: bool = False):
 
     console.print('Purchase of daily permit successful.', style='bold green')
 
-    if Confirm.ask(f'Open email ({config.user}@gmu.edu) in browser?'):
-        webbrowser.open('http://mso365.gmu.edu/')
+    mason_email = 'http://mso365.gmu.edu/'
+    if yes:
+        console.print('Opening Mason O365 Email in browser...', style='bold yellow')
+        webbrowser.open(mason_email)
+    elif Confirm.ask(f'Open email ({config.user}@gmu.edu) in browser?'):
+        webbrowser.open(mason_email)
 
 
 def main():
