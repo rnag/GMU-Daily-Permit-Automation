@@ -43,6 +43,62 @@ purchase Daily Permit for the date of class.
 
 ### Parking Date
 
-Parking Date can be a weekday like `'Monday' 'Tuesday' 'Wednesday'`
+You can pass either a *weekday* or a *hardcoded date* for the `parking date` -- date a purchased daily parking permit is valid for.
 
-or you could also hard-code the date: `October 10`
+#### Weekday
+
+Parking Date can be a weekday like `'Monday' 'Tuesday' 'Wednesday'` and so on.
+
+In this case, the script will calculate and use the date of the upcoming weekday, starting from today.
+
+If *weekday* falls on today -- for example, if parking date is "Monday" and today is
+a Monday -- then today's date will be used.
+
+#### Hard-coded Date
+
+You could also hard-code the date: `October 10`
+
+It will need to be [in the format](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) of `%B %d`, as above. 
+
+_Example:_ `December 31`
+
+## Getting Help
+
+To get help on the CLI tool, type `gmu` in a terminal window
+after the install step:
+
+```console
+$ gmu
+
+ Usage: gmu [OPTIONS] COMMAND [ARGS]...
+
+╭─ Options ──────────────────────────────────────────────────────────────────────────╮
+│ --install-completion            Install completion for the current shell.          │
+│ --show-completion               Show completion for the current shell, to copy it  │
+│                                 or customize the installation.                     │
+│ --help                -h        Show this message and exit.                        │
+╰────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────╮
+│ c | configure       Prompts the user for configuration values and updates the TOML │
+│                     file.                                                          │
+│ dp | daily-permit   Purchase a Daily (Parking) Permit for the GMU Campus.          │
+│ sc | show-config    Show the config file.                                          │
+╰────────────────────────────────────────────────────────────────────────────────────╯
+```
+
+To get help on a subcommand, pass in the `-h | --help` option.
+
+For example:
+```
+$ gmu dp -h
+
+ Usage: gmu dp [OPTIONS]
+
+ Purchase a Daily (Parking) Permit for the GMU Campus.
+
+╭─ Options ──────────────────────────────────────────────────────────────────────────╮
+│ --dry-run  -d        Enable dry run (do not purchase permit).                      │
+│ --yes      -y        Skip prompts for user input and confirmation.                 │
+│ --help     -h        Show this message and exit.                                   │
+╰─────────
+```

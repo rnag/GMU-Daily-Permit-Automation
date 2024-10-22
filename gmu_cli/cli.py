@@ -87,7 +87,6 @@ def _get_value(value, mask_value=True):
     return value if isinstance(value, str) else str(value)
 
 
-
 @dataclass
 class Config:
     user: Annotated[str, 'Mason NetID'] = _DEFAULT_NET_ID
@@ -149,7 +148,6 @@ class Config:
             )
 
         return Config()
-
 
     def title(self):
         parking_date = self.parking_date
