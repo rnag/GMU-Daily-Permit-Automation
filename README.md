@@ -1,9 +1,11 @@
 # GMU Daily Permit Automation
 
-Selenium Script to speed up the manual process of purchasing
-Daily (Parking) Permit from https://gmu.t2hosted.com/per/selectpermit.aspx.
+**`gmu` is a Python command-line to speed up purchase of a
+Daily (Parking) Permit from [GMU](https://gmu.t2hosted.com/per/selectpermit.aspx).**
 
-Use the Script to purchase following supported Permit:
+[![YouTube](https://img.youtube.com/vi/9X5lc2zZq-k/0.jpg)](https://www.youtube.com/watch?v=9X5lc2zZq-k)
+
+Use it to purchase following supported Permit:
 * `Evening General Permit (only valid from 4:00pm-11:59pm)`
 
 > [!IMPORTANT]
