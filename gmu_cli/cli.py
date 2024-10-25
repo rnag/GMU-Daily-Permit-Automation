@@ -485,6 +485,7 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
     # wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[value="<< Back"]')))
 
     driver.save_screenshot('confirm.png')
+    driver.quit()
 
     console.print('Purchase of daily permit successful.', style='bold green')
 
