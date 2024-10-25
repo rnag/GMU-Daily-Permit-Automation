@@ -1,7 +1,7 @@
 # GMU Daily Permit Automation
 
 **`gmu` is a Python command-line to speed up purchase of a
-Daily (Parking) Permit from [GMU](https://gmu.t2hosted.com/per/selectpermit.aspx).**
+Daily (Parking) Permit [from GMU](https://gmu.t2hosted.com/per/selectpermit.aspx).**
 
 [
     <img src="https://github.com/user-attachments/assets/7da2f7e2-0490-4838-b501-374311915e05" width=70% title="Demo on YouTube" alt="Demo on YouTube"/>
