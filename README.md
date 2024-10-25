@@ -3,14 +3,7 @@
 **`gmu` is a Python command-line to speed up purchase of a
 Daily (Parking) Permit from [GMU](https://gmu.t2hosted.com/per/selectpermit.aspx).**
 
-[<img src="images/thumbnail.gif" width="50%">](https://youtu.be/9X5lc2zZq-k)
-
-> [!NOTE]  
-> *Watch the Demo:*
-> 
-> [<img src="https://img.youtube.com/vi/9X5lc2zZq-k/maxresdefault.jpg" width="50%">](https://youtu.be/9X5lc2zZq-k)
-
-
+[<img src="images/thumbnail.gif" width="70%">](https://youtu.be/9X5lc2zZq-k)
 
 Use it to purchase following supported Permit:
 * `Evening General Permit (only valid from 4:00pm-11:59pm)`
