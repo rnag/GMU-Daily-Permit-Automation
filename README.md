@@ -4,13 +4,10 @@
 Daily (Parking) Permit from [GMU](https://gmu.t2hosted.com/per/selectpermit.aspx).**
 
 [
-    <img
-        src="https://github.com/user-attachments/assets/7da2f7e2-0490-4838-b501-374311915e05" 
-        width=70%
-        title="Demo on YouTube"
-        alt="Demo on YouTube"
-    />
-](https://youtu.be/9X5lc2zZq-k)
+    <img src="https://github.com/user-attachments/assets/7da2f7e2-0490-4838-b501-374311915e05" width=70% title="Demo on YouTube" alt="Demo on YouTube"/>
+](
+    https://youtu.be/9X5lc2zZq-k
+)
 
 Use it to purchase following supported Permit:
 * `Evening General Permit (only valid from 4:00pm-11:59pm)`
