@@ -108,3 +108,12 @@ $ gmu dp -h
 │ --help     -h        Show this message and exit.                                   │
 ╰────────────────────────────────────────────────────────────────────────────────────╯
 ```
+
+## Development
+
+Once you checkout or clone the Git repo,
+you can install project dependencies via:
+
+```shell
+pip install -e .[dev]
+```

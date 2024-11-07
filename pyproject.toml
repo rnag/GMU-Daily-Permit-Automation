@@ -50,3 +50,6 @@ Changelog = "https://github.com/rnag/GMU-Daily-Permit-Automation/blob/main/CHANG
 
 [project.scripts]
 gmu = "gmu_cli.cli:main"  # Adjust this to point to your main function
+
+[project.optional-dependencies]
+dev = ["bump2version"]
