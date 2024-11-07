@@ -156,7 +156,7 @@ class Config:
         except KeyError:
             pass
         else:
-            parking_date = next_day(date.today(), day).strftime('%B %d')
+            parking_date = next_day(date.today(), day).strftime('%B %-d')
 
         return parking_date
 

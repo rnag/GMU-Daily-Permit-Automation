@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Initial setup of the project.
 - Added CLI for automating daily permit tasks.
 
+## [0.1.1] - 2024-11-07
+
+### Changed
+- Don't zero pad the day of month on calendar selection,
+  because otherwise Selenium seems to crash.
+
+### Fixed
+- Fixed issue with calendar day selection, when date (day of month) was a single digit.
+
 ## [0.1.0] - 2024-10-16
 ### Added
 - Basic functionality for daily permit automation.
