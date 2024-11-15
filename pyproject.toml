@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "gmu_cli"  # Replace with your CLI name
 version = "0.1.1"
 dependencies = [
+    "dataclass-wizard[toml]>=0.28,<1",
     "selenium",
     "toml",
     "rich",
@@ -19,7 +20,7 @@ authors = [
 maintainers = [
   {name = "Ritvik Nag", email = "me@ritviknag.com"},
 ]
-description = "A CLI app built with Typer"
+description = "A CLI app built with Dataclass Wizard & Typer"
 readme = "README.md"
 license = {file = "LICENSE"}
 # license = {text = "MIT License"}
@@ -33,7 +34,6 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   # Specify the Python versions you support here.
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",

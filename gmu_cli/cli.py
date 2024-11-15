@@ -1,23 +1,24 @@
 import re
 import time
 import webbrowser
-from pathlib import Path
-from typing import Annotated, Literal
-
-import toml
-
-import typer
-from typer.core import TyperGroup
 
 from dataclasses import dataclass, fields
 from datetime import date
+from pathlib import Path
 from random import randint, uniform
+from typing import Annotated, Literal
+
+from dataclass_wizard import TOMLWizard
+from dataclass_wizard.lazy_imports import toml_w
 
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+import typer
+from typer.core import TyperGroup
 
 from rich.console import Console
 from rich.prompt import Confirm, Prompt
@@ -88,7 +89,8 @@ def _get_value(value, mask_value=True):
 
 
 @dataclass
-class Config:
+class Config(TOMLWizard):
+
     user: Annotated[str, 'Mason NetID'] = _DEFAULT_NET_ID
     password: Annotated[MaskedPassword, 'Password'] = MaskedPassword('TODO')
     parking_date: Annotated[str, 'Parking Date'] = 'Monday'
@@ -101,6 +103,8 @@ class Config:
     phone: Annotated[MaskedExceptLast4Chars, 'Phone'] = MaskedExceptLast4Chars('1234567890')
     dry_run: Annotated[bool, 'Dry Run'] = False
 
+    # TODO: I'd like to use a helper method for this.
+    #  Preferably from `dataclass-wizard`!
     def to_dict(self):
         return {
             "credentials": {
@@ -125,29 +129,33 @@ class Config:
         }
 
     @classmethod
+    def _pre_from_dict(cls, o):
+        return dict(
+            user=(credentials := o['credentials'])['user'],
+            password=credentials['password'],
+            parking_date=o['parking']['date'],
+            card_type=(card := o['credit_card'])['type'],
+            cardholder=card['name'],
+            card_num=card['number'].replace(' ', ''),
+            card_cvv=card['cvv'],
+            card_expiry_month=card['expiry_month'],
+            card_expiry_year=card['expiry_year'],
+            phone=o['contact']['phone'],
+        )
+
+    @classmethod
     def load(cls):
         # Load the TOML configuration file
         if CONFIG_FILE_PATH.is_file():
-            with CONFIG_FILE_PATH.open() as f:
-                data = toml.load(f)
-                # return Config.from_dict(data)
-
-            parking_date = data['parking']['date']
-
-            return cls(
-                user=(credentials := data['credentials'])['user'],
-                password=MaskedPassword(credentials['password']),
-                parking_date=parking_date,
-                card_type=(card := data['credit_card'])['type'],
-                cardholder=card['name'],
-                card_num=MaskedExceptLast4Chars(card['number'].replace(' ', '')),
-                card_cvv=card['cvv'],
-                card_expiry_month=card['expiry_month'],
-                card_expiry_year=card['expiry_year'],
-                phone=MaskedExceptLast4Chars(data['contact']['phone']),
-            )
+            # TODO I would like to pass in `Path` object
+            return cls.from_toml_file(str(CONFIG_FILE_PATH))
 
         return Config()
+
+    def save(self):
+        # TODO I'd like this to be easier ;-(
+        with CONFIG_FILE_PATH.open('wb') as f:
+            toml_w.dump(self.to_dict(), f)
 
     def title(self):
         parking_date = self.parking_date
@@ -222,11 +230,6 @@ class Config:
 #     return Config()
 
 
-def save_config(config: Config):
-    with CONFIG_FILE_PATH.open('w') as f:
-        toml.dump(config.to_dict(), f)
-
-
 options = webdriver.ChromeOptions()
 options.add_argument('--start-maximized')
 options.add_argument('--start-fullscreen')
@@ -270,7 +273,7 @@ def configure():
     # config.dry_run = Confirm.ask("Enable dry run mode?", default=config.dry_run)
 
     # Save the updated config back to the TOML file.
-    save_config(config)
+    config.save()
     console.print("Configuration saved successfully.", style="bold green")
 
 
