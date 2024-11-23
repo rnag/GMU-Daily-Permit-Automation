@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "gmu_cli"  # Replace with your CLI name
 version = "0.1.2"
 dependencies = [
-    "dataclass-wizard[toml]>=0.28,<1",
+    "dataclass-wizard[toml]>=0.29,<1",
     "selenium",
     "toml",
     "rich",
@@ -49,7 +49,7 @@ Repository = "https://github.com/rnag/GMU-Daily-Permit-Automation"
 Changelog = "https://github.com/rnag/GMU-Daily-Permit-Automation/blob/main/CHANGELOG.md"
 
 [project.scripts]
-gmu = "gmu_cli.cli:main"  # Adjust this to point to your main function
+gmu = "gmu_cli.cli:app"  # Adjust this to point to your main function
 
 [project.optional-dependencies]
 dev = ["bump2version"]

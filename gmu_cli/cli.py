@@ -8,8 +8,7 @@ from pathlib import Path
 from random import randint, uniform
 from typing import Annotated, Literal
 
-from dataclass_wizard import TOMLWizard
-from dataclass_wizard.lazy_imports import toml_w
+from dataclass_wizard import TOMLWizard, KeyPath
 
 from selenium import webdriver
 from selenium.webdriver import Keys
@@ -25,6 +24,7 @@ from rich.prompt import Confirm, Prompt
 from rich.table import Table
 
 from .utils import next_day, Day, get_full_name
+from .__version__ import __version__
 
 
 class AliasGroup(TyperGroup):
@@ -49,13 +49,16 @@ app = typer.Typer(cls=AliasGroup,
 
 console = Console()
 
-
 APP_NAME = __name__.split('.', 1)[0].replace('_', '-')
 
 APP_DIR = Path(typer.get_app_dir(APP_NAME))
 APP_DIR.mkdir(parents=True, exist_ok=True)
 
 CONFIG_FILE_PATH: Path = APP_DIR / "config.toml"
+
+options = webdriver.ChromeOptions()
+options.add_argument('--start-maximized')
+options.add_argument('--start-fullscreen')
 
 
 class MaskedPassword(str):
@@ -91,71 +94,47 @@ def _get_value(value, mask_value=True):
 @dataclass
 class Config(TOMLWizard):
 
-    user: Annotated[str, 'Mason NetID'] = _DEFAULT_NET_ID
-    password: Annotated[MaskedPassword, 'Password'] = MaskedPassword('TODO')
-    parking_date: Annotated[str, 'Parking Date'] = 'Monday'
-    card_type: Annotated[Literal['Visa', 'Mastercard'], 'Type'] = 'Visa'
-    cardholder: Annotated[str, 'Name on Card'] = _FULL_NAME
-    card_num: Annotated[MaskedExceptLast4Chars, 'Number'] = MaskedExceptLast4Chars('1234 5678 9012 3456')
-    card_cvv: Annotated[str, 'Security Code'] = '123'
-    card_expiry_month: Annotated[int, 'Expiration Month'] = 1
-    card_expiry_year: Annotated[int, 'Expiration Year'] = 2050
-    phone: Annotated[MaskedExceptLast4Chars, 'Phone'] = MaskedExceptLast4Chars('1234567890')
-    dry_run: Annotated[bool, 'Dry Run'] = False
-
-    # TODO: I'd like to use a helper method for this.
-    #  Preferably from `dataclass-wizard`!
-    def to_dict(self):
-        return {
-            "credentials": {
-                "user": self.user,
-                "password": str(self.password),
-            },
-            "parking": {
-                "date": self.parking_date,
-            },
-            "credit_card": {
-                "type": self.card_type,
-                "name": self.cardholder,
-                "number": str(self.card_num),
-                "cvv": self.card_cvv,
-                "expiry_month": self.card_expiry_month,
-                "expiry_year": self.card_expiry_year,
-            },
-            "contact": {
-                "phone": str(self.phone),
-            },
-            # "dry_run": self.dry_run,
-        }
-
-    @classmethod
-    def _pre_from_dict(cls, o):
-        return dict(
-            user=(credentials := o['credentials'])['user'],
-            password=credentials['password'],
-            parking_date=o['parking']['date'],
-            card_type=(card := o['credit_card'])['type'],
-            cardholder=card['name'],
-            card_num=card['number'].replace(' ', ''),
-            card_cvv=card['cvv'],
-            card_expiry_month=card['expiry_month'],
-            card_expiry_year=card['expiry_year'],
-            phone=o['contact']['phone'],
-        )
+    user: Annotated[str,
+                    KeyPath('credentials.user'),
+                    'Mason NetID'] = _DEFAULT_NET_ID
+    password: Annotated[MaskedPassword,
+                        KeyPath('credentials.password'),
+                        'Password'] = MaskedPassword('TODO')
+    parking_date: Annotated[str,
+                            KeyPath('parking.date'),
+                            'Parking Date'] = 'Monday'
+    card_type: Annotated[Literal['Visa', 'Mastercard'],
+                         KeyPath('credit_card.type'),
+                         'Type'] = 'Visa'
+    cardholder: Annotated[str,
+                          KeyPath('credit_card.name'),
+                          'Name on Card'] = _FULL_NAME
+    card_num: Annotated[MaskedExceptLast4Chars,
+                        KeyPath('credit_card.number'),
+                        'Number'] = MaskedExceptLast4Chars('1234 5678 9012 3456')
+    card_cvv: Annotated[str,
+                        KeyPath('credit_card.cvv'),
+                        'Security Code'] = '123'
+    card_expiry_month: Annotated[int,
+                                 KeyPath('credit_card.expiry_month'),
+                                 'Expiration Month'] = 1
+    card_expiry_year: Annotated[int,
+                                KeyPath('credit_card.expiry_year'),
+                                'Expiration Year'] = 2050
+    phone: Annotated[MaskedExceptLast4Chars,
+                     KeyPath('contact.phone'),
+                     'Phone'] = MaskedExceptLast4Chars('1234567890')
+    dry_run: Annotated[bool,
+                       'Dry Run'] = False
 
     @classmethod
     def load(cls):
         # Load the TOML configuration file
-        if CONFIG_FILE_PATH.is_file():
-            # TODO I would like to pass in `Path` object
-            return cls.from_toml_file(str(CONFIG_FILE_PATH))
-
-        return Config()
+        return (cls.from_toml_file(CONFIG_FILE_PATH)
+                if CONFIG_FILE_PATH.is_file() else Config())
 
     def save(self):
-        # TODO I'd like this to be easier ;-(
-        with CONFIG_FILE_PATH.open('wb') as f:
-            toml_w.dump(self.to_dict(), f)
+        self.to_toml_file(CONFIG_FILE_PATH)
 
     def title(self):
         parking_date = self.parking_date
@@ -210,29 +189,16 @@ class Config(TOMLWizard):
             if f.repr:
                 value = getattr(self, f.name)
                 if f.name.startswith('card'):
-                    tt.add_row(f.type.__metadata__[0], _get_value(value, mask_values))
+                    tt.add_row(f.type.__metadata__[-1], _get_value(value, mask_values))
                 else:
                     if f.name == 'parking_date':
                         value = self.title()
-                    st.add_row(f.type.__metadata__[0], _get_value(value, mask_values))
+                    st.add_row(f.type.__metadata__[-1], _get_value(value, mask_values))
 
         table.add_row(st, tt)
 
         # table.add_row(table2)
         console.print(table)
-
-
-# def load_config() -> Config:
-#     if CONFIG_FILE_PATH.is_file():
-#         with CONFIG_FILE_PATH.open() as f:
-#             data = toml.load(f)
-#             return Config.from_dict(data)
-#     return Config()
-
-
-options = webdriver.ChromeOptions()
-options.add_argument('--start-maximized')
-options.add_argument('--start-fullscreen')
 
 
 def configure_sensitive_field(current_value, prompt_message, mask_type, password=False):
@@ -423,6 +389,7 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
         driver.save_screenshot('summary.png')
 
         if dry_run:
+            console.print("Dry run enabled, exiting...", style='bold yellow')
             raise typer.Exit()
 
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Pay Now"]')
@@ -500,10 +467,36 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
         webbrowser.open(mason_email)
 
 
-def main():
-    app()
+def version_callback(value: bool):
+    if value:
+        print(f"GMU CLI Version: {__version__}")
+        raise typer.Exit()
+
+
+@app.callback(invoke_without_command=True)
+def main(
+    ctx: typer.Context,
+    version: bool = typer.Option(
+        False,
+        "--version",
+        "-v",
+        help="Show the application's version and exit.",
+        is_eager=True,  # Process the version flag as soon as possible
+    ),
+):
+    """
+    A CLI application with version support.
+    """
+    if version:
+        typer.echo(f"Version: {__version__}")
+        raise typer.Exit()
+
+    if not ctx.invoked_subcommand:
+        # If no subcommand is called, show help and exit
+        typer.echo(ctx.get_help())
+        raise typer.Exit()
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    main()
+    app()
