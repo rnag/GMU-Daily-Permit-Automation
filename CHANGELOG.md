@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Initial setup of the project.
 - Added CLI for automating daily permit tasks.
 
+## [0.1.3] - 2024-11-23
+
+### Added
+- Option `--version` or `-v` to print CLI version
+
+### Changed
+- Update `dataclass-wizard` dependency to `v0.29.0`
+- Add new custom nested path support in `dataclass-wizard`!
+
 ## [0.1.1] - 2024-11-07
 
 ### Changed
