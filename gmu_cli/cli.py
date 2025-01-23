@@ -410,7 +410,7 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
     credit_card_type.send_keys(config.card_type)  # Visa or Mastercard
 
     card_number = driver.find_element(By.ID, 'creditCardPaymentAccountNumber')
-    card_number.send_keys(config.card_num)
+    card_number.send_keys(config.card_num.replace(' ', ''))
 
     cvv = driver.find_element(By.ID, 'creditCardPaymentCVV2')
     cvv.send_keys(config.card_cvv)
