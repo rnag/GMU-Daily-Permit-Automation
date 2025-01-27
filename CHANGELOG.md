@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Initial setup of the project.
 - Added CLI for automating daily permit tasks.
 
+## [0.1.5] - 2024-01-27
+
+### Added
+- Option `--today` or `-t` to purchase parking permit for today's date.
+
 ## [0.1.3] - 2024-11-23
 
 ### Added

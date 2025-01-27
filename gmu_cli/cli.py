@@ -3,7 +3,7 @@ import time
 import webbrowser
 
 from dataclasses import dataclass, fields
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from random import randint, uniform
 from typing import Annotated, Literal
@@ -281,11 +281,16 @@ def show_config(mask_values: bool = False):
 @app.command('dp | daily-permit')
 def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
                                                        help='Enable dry run (do not purchase permit).')] = False,
+                 today: Annotated[bool, typer.Option('--today', '-t',
+                                                     help='Purchase parking permit for today.')] = False,
                  yes: Annotated[bool, typer.Option('--yes', '-y',
                                                    help='Skip prompts for user input and confirmation.')] = False):
     """Purchase a Daily (Parking) Permit for the GMU Campus."""
     config = Config.load()
     config.dry_run = dry_run
+
+    if today:
+        config.parking_date = datetime.today().strftime('%A')
 
     config.print_table()
     console.print()
