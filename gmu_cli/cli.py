@@ -313,6 +313,8 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
     btn = driver.find_element(By.CSS_SELECTOR, '[value="Students & Faculty/Staff"]')
     btn.click()
 
+    driver.implicitly_wait(1)
+
     uname = driver.find_element(By.ID, 'username')
     pwd = driver.find_element(By.ID, 'password')
 
@@ -348,24 +350,29 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
         driver.get('https://gmu.t2hosted.com/crt/view.aspx')
 
     else:
+        driver.implicitly_wait(1)
         check = driver.find_element(By.NAME, 'terms')
         check.click()
 
+        driver.implicitly_wait(1)
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
+        driver.implicitly_wait(1)
         label = driver.find_element(By.XPATH, '//label[text()="Evening General Permit '
                                               '(only valid from 4:00pm-11:59pm)"]')
         radio_id = label.get_attribute('for')
         radio = driver.find_element(By.ID, radio_id)
         radio.click()
 
+        driver.implicitly_wait(1)
         label = driver.find_element(By.XPATH, '//label[text()="I have read and understand the '
                                               'rules & regulations associated with the chosen permit."]')
         check_id = label.get_attribute('for')
         check = driver.find_element(By.ID, check_id)
         check.click()
 
+        driver.implicitly_wait(1)
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
@@ -375,9 +382,11 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
         date_link = driver.find_element(By.CSS_SELECTOR, f'[title="{config.title()}"]')
         date_link.click()
 
+        driver.implicitly_wait(1)
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
+        driver.implicitly_wait(1)
         # Select your Vehicles for Permit
         check = driver.find_element(By.NAME, 'terms')
         check.click()
