@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gmu_cli"  # Replace with your CLI name
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
     "dataclass-wizard[toml]>=0.35.0,<1",
     "selenium",

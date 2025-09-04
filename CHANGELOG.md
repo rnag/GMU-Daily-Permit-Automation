@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Initial setup of the project.
 - Added CLI for automating daily permit tasks.
 
+## [0.1.7] - 2025-09-03
+
+### Added
+- Option `--wait-seconds` or `-w` for seconds to implicitly wait for an HTML element to be found.
+
+### Changed
+- The default seconds to implicitly wait is increased from `1` to `2` seconds.
+
 ## [0.1.5] - 2024-01-27
 
 ### Added

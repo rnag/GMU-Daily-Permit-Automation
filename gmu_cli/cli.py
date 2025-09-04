@@ -22,6 +22,7 @@ from typer.core import TyperGroup
 from rich.console import Console
 from rich.prompt import Confirm, Prompt
 from rich.table import Table
+from rich.text import Text
 
 from .utils import next_day, Day, get_full_name
 from .__version__ import __version__
@@ -55,6 +56,7 @@ APP_DIR = Path(typer.get_app_dir(APP_NAME))
 APP_DIR.mkdir(parents=True, exist_ok=True)
 
 CONFIG_FILE_PATH: Path = APP_DIR / "config.toml"
+IMPLICIT_WAIT_SEC: float = 2.0
 
 options = webdriver.ChromeOptions()
 options.add_argument('--start-maximized')
@@ -284,13 +286,25 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
                  today: Annotated[bool, typer.Option('--today', '-t',
                                                      help='Purchase parking permit for today.')] = False,
                  yes: Annotated[bool, typer.Option('--yes', '-y',
-                                                   help='Skip prompts for user input and confirmation.')] = False):
+                                                   help='Skip prompts for user input and confirmation.')] = False,
+                 wait_seconds: Annotated[float, typer.Option('--wait-seconds', '-w',
+                                                            help='Seconds to implicitly wait '
+                                                                 'before finding consecutive HTML '
+                                                                 'elements on web pages.')] = IMPLICIT_WAIT_SEC,
+                 ):
     """Purchase a Daily (Parking) Permit for the GMU Campus."""
+    global IMPLICIT_WAIT_SEC
+
     config = Config.load()
     config.dry_run = dry_run
 
     if today:
         config.parking_date = datetime.today().strftime('%A')
+
+    if wait_seconds != IMPLICIT_WAIT_SEC:
+        IMPLICIT_WAIT_SEC = wait_seconds
+        text = Text(f"Implicit Wait: {IMPLICIT_WAIT_SEC}s", style="bold yellow")
+        console.print(text)
 
     config.print_table()
     console.print()
@@ -313,7 +327,7 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
     btn = driver.find_element(By.CSS_SELECTOR, '[value="Students & Faculty/Staff"]')
     btn.click()
 
-    driver.implicitly_wait(1)
+    driver.implicitly_wait(IMPLICIT_WAIT_SEC)
 
     uname = driver.find_element(By.ID, 'username')
     pwd = driver.find_element(By.ID, 'password')
@@ -350,29 +364,29 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
         driver.get('https://gmu.t2hosted.com/crt/view.aspx')
 
     else:
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         check = driver.find_element(By.NAME, 'terms')
         check.click()
 
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         label = driver.find_element(By.XPATH, '//label[text()="Evening General Permit '
                                               '(only valid from 4:00pm-11:59pm)"]')
         radio_id = label.get_attribute('for')
         radio = driver.find_element(By.ID, radio_id)
         radio.click()
 
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         label = driver.find_element(By.XPATH, '//label[text()="I have read and understand the '
                                               'rules & regulations associated with the chosen permit."]')
         check_id = label.get_attribute('for')
         check = driver.find_element(By.ID, check_id)
         check.click()
 
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
@@ -382,11 +396,11 @@ def daily_permit(dry_run: Annotated[bool, typer.Option('--dry-run', '-d',
         date_link = driver.find_element(By.CSS_SELECTOR, f'[title="{config.title()}"]')
         date_link.click()
 
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         btn = driver.find_element(By.CSS_SELECTOR, '[value="Next >>"]')
         btn.click()
 
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(IMPLICIT_WAIT_SEC)
         # Select your Vehicles for Permit
         check = driver.find_element(By.NAME, 'terms')
         check.click()
